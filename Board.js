@@ -36,7 +36,23 @@ class Board {
             console.log(string);
         }
     }
+
+    getCellContent(row, column) {
+        return this.matrix[row][column];
+    }
+
+    setCellContent(row, column, x) {
+        if ((x != "H") && (x != "M") && (x != "O")) {
+            return;
+        }
+        this.matrix[row][column] = x;
+    }
 }
 
+// Testing
 board = new Board(8);
+board.printBoard();
+console.log(board.getCellContent(0, 3));
+board.setCellContent(0, 3, "M");
+board.setCellContent(0, 3, "A");
 board.printBoard();
