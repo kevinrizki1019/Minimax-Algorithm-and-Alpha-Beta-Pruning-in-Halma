@@ -1,8 +1,8 @@
 // Class Board for save game board condition
 // Ketentuan konten pada elemen matrix:
 //  O : kosong
-//  H : bidak dimiliki oleh pemain Hijau
-//  M : bidak dimiliki oleh pemain Merah 
+//  M : bidak dimiliki oleh pemain Merah, letaknya di pojok kiri atas
+//  H : bidak dimiliki oleh pemain Hijau, letaknya di pojok kanan bawah 
 
 class Board {
     constructor(size) {
@@ -13,11 +13,11 @@ class Board {
             for (let j = 0; j < size; j++) {
                 // Posisi bidak Hijau yang ada di pojok kiri atas
                 if ((i < size / 2) && (j < size / 2) && (i + j < size / 2)) {
-                    this.matrix[i][j] = "H";
+                    this.matrix[i][j] = "M";
                 } 
                 // Posisi bidak Merah ada di pojok kanan bawah (perhitungannya masih bisa salah)
                 else if ((i >= size / 2) && (j >= size / 2) && (i + j > size + 2)) {
-                    this.matrix[i][j] = "M";
+                    this.matrix[i][j] = "H";
                 } 
                 // Posisi lainnya yang mula-mula kosong
                 else {
@@ -50,9 +50,11 @@ class Board {
 }
 
 // Testing
-board = new Board(8);
-board.printBoard();
-console.log(board.getCellContent(0, 3));
-board.setCellContent(0, 3, "M");
-board.setCellContent(0, 3, "A");
-board.printBoard();
+// board = new Board(8);
+// board.printBoard();
+// console.log(board.getCellContent(0, 3));
+// board.setCellContent(0, 3, "M");
+// board.setCellContent(0, 3, "A");
+// board.printBoard();
+
+module.exports = { Board }
