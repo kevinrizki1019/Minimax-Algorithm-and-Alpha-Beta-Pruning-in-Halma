@@ -1,32 +1,3 @@
-class Position {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    setAbsis(x) {
-        this.x = x;
-    }
-
-    setOrdinat(y) {
-        this.y = y;
-    }
-
-    getAbsis() {
-        console.log(this.x);
-        // return this.x;
-    }
-
-    getOrdinat() {
-        console.log(this.y);
-        // return this.y;
-    }
-
-    printPoint() {
-        console.log("(",this.x,",",this.y,")");
-    }
-}
-
 // Class Board for save game board condition
 // Ketentuan konten pada elemen matrix:
 //  O : kosong
@@ -44,7 +15,7 @@ class Board {
                     this.matrix[i][j] = "M";
                 } 
                 // Posisi bidak Merah ada di pojok kanan bawah (perhitungannya masih bisa salah)
-                else if ((i >= size / 2) && (j >= size / 2) && (i + j > size + 2)) {
+                else if ((i >= size / 2) && (j >= size / 2) && (i + j > size + )) {
                     this.matrix[i][j] = "H";
                 } 
                 // Posisi lainnya yang mula-mula kosong
@@ -78,11 +49,7 @@ class Board {
 }
 
 // Testing
-// board = new Board(8);
-// board.printBoard();
-// console.log(board.getCellContent(0, 3));
-// board.setCellContent(0, 3, "M");
-// board.setCellContent(0, 3, "A");
-// board.printBoard();
+board = new Board(10);
+board.printBoard();
 
-module.exports = { Position, Board }
+module.exports = { Board }

@@ -1,6 +1,5 @@
-const { Position } = require('./Board.js');
+const { Position } = require('./Position.js');
 const { Board } = require('./Board.js');
-
 
 /**
  * Setiap Player akan memiliki kode warna antara "merah" atau "hijau"
@@ -23,9 +22,6 @@ class Player {
     }
 
     printPawnOwnedPositions() {
-        // this.listOfPawnPosition.forEach(pos => {
-        //     pos.printPoint();
-        // })
         for (var i in this.listOfPawnPosition) {
             this.listOfPawnPosition[i].printPoint();
         }
@@ -57,12 +53,9 @@ class Player {
     validateStep(pawnMovedInitialPosition, pawnMovedTargetPosition) {
         // Kasus bidak tidak melompat
 
-
         // Kasus bidak harus melompat
     }
 }
 
 player1 = new Player('merah', 8);
-player1.printPawnOwnedPositions();
 player1.moveAPawn(new Position(3, 0), new Position(3, 1));
-player1.printPawnOwnedPositions();
