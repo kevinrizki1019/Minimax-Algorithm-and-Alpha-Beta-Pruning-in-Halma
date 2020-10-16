@@ -37,7 +37,7 @@ class Player {
         }
     }
 
-    moveAPawn(currentPosition, finalPosition) {
+    moveAPawnFromPlayerList(currentPosition, finalPosition) {
         let index;
         for (var i in this.listOfPawnPosition) {
             if (this.listOfPawnPosition[i].isSame(currentPosition)) {

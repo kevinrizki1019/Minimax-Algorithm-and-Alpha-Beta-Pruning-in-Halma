@@ -3,6 +3,8 @@
 //  O : kosong
 //  M : bidak dimiliki oleh pemain Merah, letaknya di pojok kiri atas
 //  H : bidak dimiliki oleh pemain Hijau, letaknya di pojok kanan bawah 
+const { Position } = require('./Position.js');
+
 class Board {
     constructor(size) {
         this.size = size;
@@ -55,19 +57,28 @@ class Board {
     }
 
     getCellContent(row, column) {
-        return this.matrix[row][column];
+        return this.matrix[column][row];
     }
 
     setCellContent(row, column, x) {
         if ((x != "H") && (x != "M") && (x != "O")) {
             return;
         }
-        this.matrix[row][column] = x;
+        this.matrix[column][row] = x;
+    }
+
+    moveAPawnFromBoard(currentPosition, finalPosition) {
+        let content = this.getCellContent(currentPosition.x, currentPosition.y);
+        
+        this.setCellContent(currentPosition.x, currentPosition.y, 'O');
+        this.setCellContent(finalPosition.x, finalPosition.y, content); 
     }
 }
 
 // Testing
-// board = new Board(16);
+// board = new Board(8);
+// board.printBoard();
+// board.moveAPawnFromBoard(new Position(3, 0), new Position(4, 0));
 // board.printBoard();
 
 module.exports = { Board }
