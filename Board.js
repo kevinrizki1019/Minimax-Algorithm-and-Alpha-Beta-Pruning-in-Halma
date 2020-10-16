@@ -27,10 +27,28 @@ class Board {
     }
 
     printBoard() {
+        // I know this is so complicated, but trust me the 
+        // output is worth to make
+        let string = "   ";
+        for (let i = 0; i < this.size; i++) {
+            if (i < 10) {
+                string += i + "  ";
+            } else {
+                string += i + " "; 
+            }
+        }
+        console.log(string);
+
+
         for (let i = 0; i < this.size; i++) {
             let string = "";
+            string += i + " ";
+            if (i < 10) {
+                string += " ";
+            }
+
             for (let j = 0; j < this.size; j++) {
-                string += this.matrix[i][j] + " ";
+                string += this.matrix[i][j] + "  "
             }
             console.log(string);
         }
@@ -49,7 +67,7 @@ class Board {
 }
 
 // Testing
-board = new Board(10);
+board = new Board(16);
 board.printBoard();
 
 module.exports = { Board }
