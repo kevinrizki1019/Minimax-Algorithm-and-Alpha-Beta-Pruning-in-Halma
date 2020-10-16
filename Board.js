@@ -67,7 +67,7 @@ class Board {
 }
 
 // Testing
-board = new Board(16);
-board.printBoard();
+// board = new Board(16);
+// board.printBoard();
 
 module.exports = { Board }

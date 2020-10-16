@@ -1,11 +1,12 @@
 const { Position } = require('./Position.js');
-const { Board } = require('./Board.js');
 
 /**
  * Setiap Player akan memiliki kode warna antara "merah" atau "hijau"
  * Pada player terdapat list of tuple yang adalah posisi dari semua bidak yang dimiliki player
  */
 class Player {
+    // Nyimpen data warna dan array posisi bidak yang dimiliki
+    // domain color = {"hijau", "merah"}
     constructor(color, size) {
         this.color = color;
         this.listOfPawnPosition = [];
@@ -13,6 +14,15 @@ class Player {
             for (let i = 0; i < size / 2; i++) {
                 for (let j = 0; j < size / 2; j++) {
                     if (i + j < size / 2) {
+                        let position = new Position(i, j);
+                        this.listOfPawnPosition.push(position);
+                    }
+                }
+            }
+        } else if (color == "hijau") {
+            for (let i = size / 2; i < size; i++) {
+                for (let j = size / 2; j < size; j++) {
+                    if (i + j >= (size - 1) + (size / 2)) {
                         let position = new Position(i, j);
                         this.listOfPawnPosition.push(position);
                     }
@@ -57,5 +67,7 @@ class Player {
     }
 }
 
-player1 = new Player('merah', 8);
-player1.moveAPawn(new Position(3, 0), new Position(3, 1));
+// player1 = new Player('hijau', 8);
+// player1.printPawnOwnedPositions();
+
+module.exports = { Player };
