@@ -15,7 +15,7 @@ class Board {
                     this.matrix[i][j] = "M";
                 } 
                 // Posisi bidak Merah ada di pojok kanan bawah (perhitungannya masih bisa salah)
-                else if ((i >= size / 2) && (j >= size / 2) && (i + j > size + )) {
+                else if ((i >= size / 2) && (j >= size / 2) && (i + j >= (size - 1) + (size / 2))) {
                     this.matrix[i][j] = "H";
                 } 
                 // Posisi lainnya yang mula-mula kosong
