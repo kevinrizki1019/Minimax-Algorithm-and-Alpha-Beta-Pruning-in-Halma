@@ -17,6 +17,7 @@ class GameManager {
     }
 
     inputDialog() {
+        // Ini design nya bad banget tapi baru ini yang jalan
         let xinitial;
         let yinitial;
         let xfinal;
