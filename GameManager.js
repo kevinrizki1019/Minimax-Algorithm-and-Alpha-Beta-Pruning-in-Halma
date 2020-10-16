@@ -1,9 +1,7 @@
 const readline = require('readline');
-const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 const { Board } = require('./Board.js');
 const { Player } = require('./Player.js');
 const { Position } = require('./Position.js');
-
 
 class GameManager {
     constructor() {
@@ -15,25 +13,70 @@ class GameManager {
 
     printState() {
         this.board.printBoard();
-        console.log("Player turn = ", this.turn);
+        console.log("Player turn : ", this.turn);
     }
 
     inputDialog() {
-        console.log("Input pawn position you want to move");
-        console.log("x : ");
-        process.stdin.once('data', (x) => {
-            x.toString().trim(); 
-            process.exit();
-        });       
+        let xinitial;
+        let yinitial;
+        let xfinal;
+        let yfinal;
 
-        console.log("y : ");
-        process.stdin.once('data', (y) => {
-            x.toString().trim(); 
-            process.exit();
-        });       
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        })
 
-        // x = parseInt(x);
-        // y = parseInt(y); 
+        const question1 = () => {
+            return new Promise((resolve, reject) => {
+                rl.question("x : ", (xraw) => {
+                    xinitial = parseInt(xraw);
+                    resolve();
+                })
+            })
+        }
+        
+        const question2 = () => {
+            return new Promise((resolve, reject) => {
+                rl.question("y : ", (yraw) => {
+                    yinitial = parseInt(yraw);
+                    resolve();
+                })
+            })
+        }
+        
+        const question3 = () => {
+            return new Promise((resolve, reject) => {
+                rl.question("x : ", (yraw) => {
+                    xfinal = parseInt(yraw);
+                    resolve();
+                })
+            })
+        }
+        
+        const question4 = () => {
+            return new Promise((resolve, reject) => {
+                rl.question("y : ", (yraw) => {
+                    yfinal = parseInt(yraw);
+                    resolve();
+                })
+            })
+        }
+
+        const main = async () => {
+            console.log("Input pawn position you want to move");
+            await question1();
+            await question2();
+            
+            console.log("Initial position: (",xinitial,",",yinitial,")");
+            console.log("Input target position");
+            await question3();
+            await question4();
+            console.log("Target position: (",xfinal,",",yfinal,")");
+            rl.close();
+        }
+
+        main();
     }
 }
 
