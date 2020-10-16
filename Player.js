@@ -1,5 +1,5 @@
+const { Position } = require('./Board.js');
 const { Board } = require('./Board.js');
-
 
 
 /**
@@ -14,8 +14,8 @@ class Player {
             for (let i = 0; i < size / 2; i++) {
                 for (let j = 0; j < size / 2; j++) {
                     if (i + j < size / 2) {
-                        this.listOfPawnPosition.push((i, j));
-                        console.log((i, j));
+                        let position = new Position(i, j);
+                        this.listOfPawnPosition.push(position);
                     }
                 }
             }
@@ -23,9 +23,9 @@ class Player {
     }
 
     printPawnOwnedPositions() {
-        for (const [i, j] in this.listOfPawnPosition) {
-            console.log((i, j));
-        }
+        this.listOfPawnPosition.forEach(pos => {
+            pos.printPoint();
+        })
     }
 
     /**
@@ -44,4 +44,4 @@ class Player {
 }
 
 player1 = new Player('merah', 8);
-// player1.printPawnOwnedPositions();
+player1.printPawnOwnedPositions();
