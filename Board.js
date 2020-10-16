@@ -1,9 +1,37 @@
+class Position {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    setAbsis(x) {
+        this.x = x;
+    }
+
+    setOrdinat(y) {
+        this.y = y;
+    }
+
+    getAbsis() {
+        console.log(this.x);
+        // return this.x;
+    }
+
+    getOrdinat() {
+        console.log(this.y);
+        // return this.y;
+    }
+
+    printPoint() {
+        console.log("(",this.x,",",this.y,")");
+    }
+}
+
 // Class Board for save game board condition
 // Ketentuan konten pada elemen matrix:
 //  O : kosong
 //  M : bidak dimiliki oleh pemain Merah, letaknya di pojok kiri atas
 //  H : bidak dimiliki oleh pemain Hijau, letaknya di pojok kanan bawah 
-
 class Board {
     constructor(size) {
         this.size = size;
@@ -57,4 +85,4 @@ class Board {
 // board.setCellContent(0, 3, "A");
 // board.printBoard();
 
-module.exports = { Board }
+module.exports = { Position, Board }
