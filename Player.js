@@ -23,9 +23,28 @@ class Player {
     }
 
     printPawnOwnedPositions() {
-        this.listOfPawnPosition.forEach(pos => {
-            pos.printPoint();
-        })
+        // this.listOfPawnPosition.forEach(pos => {
+        //     pos.printPoint();
+        // })
+        for (var i in this.listOfPawnPosition) {
+            this.listOfPawnPosition[i].printPoint();
+        }
+    }
+
+    moveAPawn(currentPosition, finalPosition) {
+        let index;
+        for (var i in this.listOfPawnPosition) {
+            if (this.listOfPawnPosition[i].isSame(currentPosition)) {
+                index = i;
+            }
+        }
+    
+        if(typeof index !== "undefined") {
+            this.listOfPawnPosition[index].setAbsis(finalPosition.x);
+            this.listOfPawnPosition[index].setOrdinat(finalPosition.y); 
+        } else {
+            console.log("Invalid pawn current position");
+        }
     }
 
     /**
@@ -44,4 +63,6 @@ class Player {
 }
 
 player1 = new Player('merah', 8);
+player1.printPawnOwnedPositions();
+player1.moveAPawn(new Position(3, 0), new Position(3, 1));
 player1.printPawnOwnedPositions();
