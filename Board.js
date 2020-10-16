@@ -68,17 +68,62 @@ class Board {
     }
 
     moveAPawnFromBoard(currentPosition, finalPosition) {
+        if (!this.validateMove(currentPosition, finalPosition)) {
+            return;
+        }
+
         let content = this.getCellContent(currentPosition.x, currentPosition.y);
         
         this.setCellContent(currentPosition.x, currentPosition.y, 'O');
         this.setCellContent(finalPosition.x, finalPosition.y, content); 
     }
+
+    validateMove(currentPosition, finalPosition) {
+        if (currentPosition.x >= this.size || currentPosition.y >= this.size || currentPosition.x < 0 || currentPosition.y < 0) {
+            console.log("Invalid pawn selected, out of bound");
+            return false;
+        }
+        
+        if (finalPosition.x >= this.size || finalPosition.y >= this.size || finalPosition.x < 0 || finalPosition.y < 0) {
+            console.log("Invalid target position, out of bound");
+            return false;
+        }
+
+        if (this.getCellContent(currentPosition.x, currentPosition.y) == "O") {
+            console.log("Invalid pawn selected, empty cell");
+            return false;
+        }
+        
+        if (this.getCellContent(finalPosition.x, finalPosition.y) != "O") {
+            console.log("Invalid target position, cell occupied")
+            return false;
+        }
+
+        if ((currentPosition.x == finalPosition.x) && (currentPosition.y == finalPosition.y)) {
+            console.log("Invalid move, not moved to anywhere");
+            return false;
+        }
+
+        // Cek apakah finalPosition ada di 8 petak disekelilingnya
+        let diffX = Math.abs(currentPosition.x - finalPosition.x);
+        let diffY = Math.abs(currentPosition.y - finalPosition.y);
+
+        if ((diffX <= 1) && (diffY <= 1)) {
+            console.log("Valid move to one cell surround it");
+            return true;
+        }
+        
+        // KASUS MELOMPAT
+
+
+        
+    } 
 }
 
 // Testing
-// board = new Board(8);
-// board.printBoard();
-// board.moveAPawnFromBoard(new Position(3, 0), new Position(4, 0));
-// board.printBoard();
+board = new Board(8);
+board.printBoard();
+board.moveAPawnFromBoard(new Position(4, 0), new Position(4, 0));
+board.printBoard();
 
 module.exports = { Board }

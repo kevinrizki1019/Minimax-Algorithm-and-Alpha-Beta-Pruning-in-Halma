@@ -16,6 +16,18 @@ class GameManager {
         console.log("Player turn : ", this.turn);
     }
 
+    validateMove(currentPosition, finalPositon) {
+        // UNTUK PLAYER, VALIDATE MOVE JUGA MEMASTIKAN BIDAK YANG DIPILIH
+        // ADALAH MILIK DIA
+
+        // PADA GAME MANAGER, VALIDATE MOVE MEMASTIKAN BAHWA BIDAK YANG DIPINDAHKAN
+        // ADALAH BIDAK MILIK PLAYER YANG SEDANG BERJALAN
+        
+        // ADA TAMBAHAN JUGA UNTUK MEMASTIKAN BIDAK TIDAK MUNDUR DARI DAERAH TENGAH
+        // KE DAERAH RUMAH ATAU MUNDUR DARI DAERAH TUJUAN KE DAERAH TENGAH
+
+    }
+
     inputDialog() {
         // Ini design nya bad banget tapi baru ini yang jalan
         let xinitial;

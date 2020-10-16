@@ -53,18 +53,6 @@ class Player {
         }
     }
 
-    /**
-     * validateStep akan mengembalikan boolean true atau false.
-     * true bidak dapat dipindahkan dari intial position ke final position.
-     * 
-     * @param {*} pawnMovedInitialPosition posisi bidak mula 
-     * @param {*} pawnMovedTargetPosition posisi bidak tujuan
-     */
-    validateStep(pawnMovedInitialPosition, pawnMovedTargetPosition) {
-        // Kasus bidak tidak melompat
-
-        // Kasus bidak harus melompat
-    }
 }
 
 // player1 = new Player('hijau', 8);
