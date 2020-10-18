@@ -1,4 +1,8 @@
 const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
 const { Board } = require('./Board.js');
 const { Player } = require('./Player.js');
 const { Position } = require('./Position.js');
@@ -16,16 +20,23 @@ class GameManager {
         console.log("Player turn : ", this.turn);
     }
 
-    validateMove(currentPosition, finalPositon) {
+    validateMove(currentPosition, finalPositon, turn) {
         // UNTUK PLAYER, VALIDATE MOVE JUGA MEMASTIKAN BIDAK YANG DIPILIH
         // ADALAH MILIK DIA
-
-        // PADA GAME MANAGER, VALIDATE MOVE MEMASTIKAN BAHWA BIDAK YANG DIPINDAHKAN
-        // ADALAH BIDAK MILIK PLAYER YANG SEDANG BERJALAN
+        let content = this.board.getCellContent(currentPosition.x, currentPosition.y);
+        if (turn == "merah") {
+            turn = "M";
+        } else if (turn == "hijau") {
+            turn = "H";
+        } 
         
-        // ADA TAMBAHAN JUGA UNTUK MEMASTIKAN BIDAK TIDAK MUNDUR DARI DAERAH TENGAH
-        // KE DAERAH RUMAH ATAU MUNDUR DARI DAERAH TUJUAN KE DAERAH TENGAH
-
+        if (content != turn) {
+            console.log("Invalid selected pawn, that's not your pawn!");
+            return false;
+        }
+        
+        return true;
+    
     }
 
     inputDialog() {
@@ -35,11 +46,6 @@ class GameManager {
         let xfinal;
         let yfinal;
         let finish = false;
-
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        })
 
         const question1 = () => {
             return new Promise((resolve, reject) => {
@@ -90,18 +96,25 @@ class GameManager {
                 await question4();
                 console.log("Target position: (",xfinal,",",yfinal,")");
     
-                this.board.moveAPawnFromBoard(new Position(xinitial, yinitial), new Position(xfinal, yfinal));
-                if (this.turn == "merah") {
-                    this.player1.moveAPawnFromPlayerList(new Position(xinitial, yinitial), new Position(xfinal, yfinal));
-                } else { // this.turn == "hijau  
-                    this.player2.moveAPawnFromPlayerList(new Position(xinitial, yinitial), new Position(xfinal, yfinal));
+                // Validasi player memilih bidak yang tepat
+                if (this.validateMove(new Position(xinitial, yinitial), new Position(xfinal, yfinal), this.turn)) {
+                    if (this.board.moveAPawnFromBoard(new Position(xinitial, yinitial), new Position(xfinal, yfinal))) {
+                        
+                        if (this.turn == "merah") {
+                            this.player1.moveAPawnFromPlayerList(new Position(xinitial, yinitial), new Position(xfinal, yfinal));
+                        } else { // this.turn == "hijau  
+                            this.player2.moveAPawnFromPlayerList(new Position(xinitial, yinitial), new Position(xfinal, yfinal));
+                        }
+    
+                        if (this.turn == "merah") {
+                            this.turn = "hijau"; 
+                        } else {
+                            this.turn = "merah";
+                        }
+
+                    }
                 }
 
-                if (this.turn == "merah") {
-                    this.turn = "hijau"; 
-                } else {
-                    this.turn = "merah";
-                }
             }
             rl.close();
         }
