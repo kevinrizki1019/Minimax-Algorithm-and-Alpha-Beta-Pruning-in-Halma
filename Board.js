@@ -14,15 +14,15 @@ class Board {
             for (let j = 0; j < size; j++) {
                 // Posisi bidak Hijau yang ada di pojok kiri atas
                 if ((i < size / 2) && (j < size / 2) && (i + j < size / 2)) {
-                    this.matrix[i][j] = "M";
+                    this.matrix[i][j] = 1;
                 } 
                 // Posisi bidak Merah ada di pojok kanan bawah (perhitungannya masih bisa salah)
                 else if ((i >= size / 2) && (j >= size / 2) && (i + j >= (size - 1) + (size / 2))) {
-                    this.matrix[i][j] = "H";
+                    this.matrix[i][j] = 2;
                 } 
                 // Posisi lainnya yang mula-mula kosong
                 else {
-                    this.matrix[i][j] = "O";
+                    this.matrix[i][j] = 3;
                 }
             }
         }

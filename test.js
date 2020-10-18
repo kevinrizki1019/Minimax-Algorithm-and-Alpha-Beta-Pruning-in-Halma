@@ -67,7 +67,7 @@ function isGameFinished(Board) {
     // Check if player 1 win
     if (!game_end) {
         game_end = true
-        const copyBoard = Object.assign(Board)
+        const copyBoard = JSON.parse(JSON.stringify(state))
         for (const row of copyBoard) {
             row.reverse() 
         }
@@ -109,7 +109,13 @@ function arrayEquals(a, b) {
       Array.isArray(b) &&
       a.length === b.length &&
       a.every((val, index) => val === b[index]);
-  }
+}
+
+function test_copy() {
+    let copyBoard = JSON.parse(JSON.stringify(Board))
+    copyBoard[0][0] = 9
+    console.log(Board)
+}
 
 function explorePath(state, player, objPaths, visited, x, y) {
     const opponent = (player % 2) + 1
@@ -135,10 +141,10 @@ function explorePath(state, player, objPaths, visited, x, y) {
     } 
     if (end_path) {
         objPaths.paths = [...objPaths.paths, [x, y]]
-        return [x, y]
+        // return [x, y]
     }
     for (const [moveX, moveY] of moved) {
-        const copyState = Object.assign(state)
+        const copyState = JSON.parse(JSON.stringify(state))
         copyState[moveY][moveX] = player
         copyState[y][x] = 0
         explorePath(copyState, player, objPaths, [...visited, [x, y]], moveX, moveY)
@@ -148,7 +154,8 @@ function explorePath(state, player, objPaths, visited, x, y) {
 function test() {
     let objPaths = {paths: [], visited: []}
     paths = []
-    explorePath(Board_test_generate_children, 2, objPaths, [], 4, 4)
+    explorePath(Board, 1, objPaths, [], 0, 0)
+    console.log(Board)
     console.log(objPaths.paths)
 }
 
@@ -184,7 +191,7 @@ function minimax(state, depth, player, isMaximizing, alpha, beta) {
                         const moveX = x + move[0]
                         const moveY = y + move[1]
                         if (isValidMove(state, x, y, moveX, moveY)) {
-                            const copyState = Object.assign(state)
+                            const copyState = JSON.parse(JSON.stringify(state))
                             copyState[moveY][moveX] = player
                             copyState[y][x] = 0
                             score = minimax(copyState, depth+1, opponent, [x, y], false, alpha, beta)
@@ -222,7 +229,7 @@ function minimax(state, depth, player, isMaximizing, alpha, beta) {
                         const moveX = x + move[0]
                         const moveY = y + move[1]
                         if (isValidMove(state, x, y, moveX, moveY)) {
-                            const copyState = Object.assign(state)
+                            const copyState = JSON.parse(JSON.stringify(state))
                             copyState[moveY][moveX] = opponent
                             copyState[y][x] = 0
                             score = minimax(copyState, depth+1, player, [x, y], true, alpha, beta)
