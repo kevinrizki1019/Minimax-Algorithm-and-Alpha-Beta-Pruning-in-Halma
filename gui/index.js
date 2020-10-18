@@ -22,6 +22,14 @@ class Canvas {
         this.ctx.stroke()
     }
 
+    createCircle(x, y) {
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, 25, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.strokeStyle = '#000'
+        this.ctx.stroke()
+    }
+
     clear() {
         this.ctx.clearRect(0, 0, this.element.width, this.element.height)
     }
@@ -34,16 +42,27 @@ class Board {
 
     draw() {
         console.log(this.game.boardMatrix)
-        let game = this.game
-        for (let i = 0; i < game.boardSize; i++) {
-            for (let j = 0; j < game.boardSize; j++) {
+        const game = this.game
+        const size = game.boardSize
+        let color = null
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if ((i < size / 2) && (j < size / 2) && (i + j < size / 2)) {
+                    color = 'red'
+                } 
+                // Posisi bidak Merah ada di pojok kanan bawah (perhitungannya masih bisa salah)
+                else if ((i >= size / 2) && (j >= size / 2) && (i + j >= (size - 1) + (size / 2))) {
+                    color = 'green'
+                } else {
+                    color = 'white'
+                }
                 game.canvas
                     .createRectangle(
                         i * game.blockSize, 
                         j * game.blockSize, 
                         game.blockSize, 
                         game.blockSize,
-                        '#1cad21'
+                        color
                     )
             }
         }
@@ -84,12 +103,31 @@ class Pawn {
         let game = this.game
         let fontSize = 30
         game.canvas.ctx.font = fontSize + "px Arial"
-        game.canvas.ctx
-            .strokeText(
-                this.img, 
-                this.x * game.blockSize + game.blockSize/2 - fontSize/3,
-                this.y * game.blockSize + game.blockSize/2 + fontSize/3
+        // game.canvas.ctx
+        //     .fillText(
+        //         this.img, 
+        //         this.x * game.blockSize + game.blockSize/2 - fontSize/3,
+        //         this.y * game.blockSize + game.blockSize/2 + fontSize/3
+        //         )
+        let pawnColor = null
+        if (this.color === "red") {
+            pawnColor = "#822322"
+        } else {
+            pawnColor = "#085427"
+        }
+        game.canvas.ctx.fillStyle = pawnColor
+        game.canvas
+            .createCircle(
+                this.x * game.blockSize + game.blockSize/2 - fontSize/24, 
+                this.y * game.blockSize + game.blockSize/2 + fontSize/24
             )
+        // game.canvas.ctx
+        //     .strokeText(
+        //         this.img, 
+        //         this.x * game.blockSize + game.blockSize/2 - fontSize/3,
+        //         this.y * game.blockSize + game.blockSize/2 + fontSize/3,
+        //         'black'
+        //     )
     }
 }
 
@@ -168,6 +206,10 @@ class GameManager {
         this.board.update()
     }
 
+    start() {
+        this.currentPlayer.move()
+    }
+
     getValidMovesPawnAt(x, y) {
 
         // return validMoves
@@ -185,9 +227,7 @@ class Human extends Player {
 
     constructor(game, color) {
         super(game, color)
-        this.selectedPawn = null
-        this.selectedTarget = null
-        this.selectedPawnValidMoves = null
+        this.resetAction()
     }
 
     resetAction() {
@@ -197,11 +237,7 @@ class Human extends Player {
     }
 
     move() {
-        while (!(this.selectedPawn && this.selectedTarget)) {
-
-        }
-        this.game.board.draw()
-        this.game.changePlayer()
+        // do nothing
     }
 }
 
@@ -217,29 +253,32 @@ const player2 = new Human(game, 'green')
 game.setup(player1, player2)
 
 window.addEventListener('click', (e) => {   
-    const x = Math.floor(e.clientX/game.blockSize)
-    const y = Math.floor(e.clientY/game.blockSize)
-    console.log(x, y)
-
-    let selectedPawn = game.getPawnAt(x, y) 
-    if (selectedPawn) {
-        console.log("selecting a pawn", `(${selectedPawn.x}, ${selectedPawn.y})`)
-        if (selectedPawn.color === game.currentPlayer.color)
-        {
-            console.log("selecting current player's pawn")
-            console.log(selectedPawn)
-            game.currentPlayer.selectedPawn = selectedPawn
+    console.log(typeof game.currentPlayer )
+    if (game.currentPlayer instanceof Human) {
+        const x = Math.floor(e.clientX/game.blockSize)
+        const y = Math.floor(e.clientY/game.blockSize)
+        console.log(x, y)
+    
+        let selectedPawn = game.getPawnAt(x, y) 
+        if (selectedPawn) {
+            console.log("selecting a pawn", `(${selectedPawn.x}, ${selectedPawn.y})`)
+            if (selectedPawn.color === game.currentPlayer.color)
+            {
+                console.log("selecting current player's pawn")
+                console.log(selectedPawn)
+                game.currentPlayer.selectedPawn = selectedPawn
+            } else {
+                console.log("selecting other player's pawn")
+            }
         } else {
-            console.log("selecting other player's pawn")
-        }
-    } else {
-        console.log("selecting an empty block")
-        if (game.currentPlayer.selectedPawn) {
-            // console.log(selectedPawn.x)
-            console.log(`move pawn at (${game.currentPlayer.selectedPawn.x}, ${game.currentPlayer.selectedPawn.y}) to (${x}, ${y})`)
-            game.movePawnTo(game.currentPlayer.selectedPawn, x, y)
-            game.changePlayer()
-            console.log(game.boardMatrix)
+            console.log("selecting an empty block")
+            if (game.currentPlayer.selectedPawn) {
+                // console.log(selectedPawn.x)
+                console.log(`move pawn at (${game.currentPlayer.selectedPawn.x}, ${game.currentPlayer.selectedPawn.y}) to (${x}, ${y})`)
+                game.movePawnTo(game.currentPlayer.selectedPawn, x, y)
+                game.changePlayer()
+                console.log(game.boardMatrix)
+            }
         }
     }
 })
