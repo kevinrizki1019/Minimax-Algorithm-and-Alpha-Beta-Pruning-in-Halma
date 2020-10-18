@@ -26,7 +26,7 @@ class Board {
                 } 
                 // Other cells set initially empty
                 else {
-                    this.matrix[i][j] = 0;
+                    this.matrix[i][j] = 3;
                 }
             }
         }
