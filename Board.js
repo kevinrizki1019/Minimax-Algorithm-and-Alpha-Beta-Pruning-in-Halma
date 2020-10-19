@@ -1,4 +1,4 @@
-const { Position } = require('./Position.js');
+const { Position } = require('./src/Position.js');
 
 /**
  * Class Board for save game board condition
