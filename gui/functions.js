@@ -26,7 +26,8 @@ function copyPawn(pawn) {
     return new Pawn(new Position(pawn.x, pawn.y), pawn.color)
 }
 
-function explorePath(state, objPaths, visited, post) {
+function explorePath(state, depth, objPaths, visited, post) {
+
     let end_path = true
     moves = [[0, -2], [0, 2], [-2, 0], [2, 0], [-2, -2], [2, -2], [2, 2], [-2, 2]]
     moved = []
@@ -49,14 +50,14 @@ function explorePath(state, objPaths, visited, post) {
         }
     } 
     if (end_path) {
-        objPaths.paths.push(post)
+        return
     } else {
         for (const move of moved) {
-            objPaths.paths.push(post)
+            objPaths.paths.push(move)
             const copiedState = copyState(state)
             copiedState[move.y][move.x] = copiedState[post.y][post.x]
             copiedState[post.y][post.x] = null  
-            explorePath(copiedState, objPaths, [...visited, post], new Position(move.x, move.y))
+            explorePath(copiedState, depth+1, objPaths, [...visited, post], new Position(move.x, move.y))
         }
     }
 }
@@ -82,7 +83,7 @@ function getValidMovesPawnAt(state, x, y) {
     }
 
     let obj = {paths: validMoves}
-    explorePath(state, obj, [], new Position(x, y))
+    explorePath(state, 0, obj, [], new Position(x, y))
 
     return obj.paths
 }

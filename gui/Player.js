@@ -65,8 +65,7 @@ class BotMinimax extends Player {
         let disX = to.x-from.x
         let disY = to.y-from.y
         // return Math.abs((disX+disY)-Math.max(disX,disY))
-        let dist = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2))
-        return dist
+        return Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2))
     }
     
     getScore(state){
@@ -77,17 +76,17 @@ class BotMinimax extends Player {
             for (const pawn of this.listOfPawns) {
                 poin -= this.stepNeeded(pawn.post, new Position(state.length-1, state.length-1))
             }
-            for (const pawn of game.players[1].listOfPawns) {
-                poin += this.stepNeeded(pawn.post, new Position(0, 0))
-            }
+            // for (const pawn of game.players[1].listOfPawns) {
+            //     poin += this.stepNeeded(pawn.post, new Position(0, 0))
+            // }
             return poin
         } else {
             for (const pawn of this.listOfPawns) {
                 poin -= this.stepNeeded(pawn.post, new Position(0, 0))
             }
-            for (const pawn of game.players[0].listOfPawns) {
-                poin += this.stepNeeded(pawn.post, new Position(state.length-1, state.length-1))
-            }
+            // for (const pawn of game.players[0].listOfPawns) {
+            //     poin += this.stepNeeded(pawn.post, new Position(state.length-1, state.length-1))
+            // }
             return poin
         }
     }
@@ -112,6 +111,8 @@ class BotMinimax extends Player {
                             copiedState[move.y][move.x] = new Pawn(new Position(move.x, move.y), pawn.color)
                             copiedState[y][x] = null
                             const score = this.minimax(copiedState, depth+1, game, false, alpha, beta)
+                            console.log(state, copiedState)
+                            console.log(score)
                             if (score > bestScore) {
                                 bestScore = score
                                 bestMove = {pawn: pawn, move: move}
