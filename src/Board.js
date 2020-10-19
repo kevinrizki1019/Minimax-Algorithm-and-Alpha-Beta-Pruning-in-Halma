@@ -32,9 +32,7 @@ class Board {
 
     update() {
         const game = this.game
-        game.canvas.clear()
         this.draw()
-
         for (let i = 0; i < 2; i++) {
             for (const pawn of game.players[i].listOfPawns) {
                 pawn.draw()

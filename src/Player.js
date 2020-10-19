@@ -64,7 +64,7 @@ class BotMinimax extends Player {
     }
 
     minimax(state, depth, game, isMaximizing, alpha, beta) {
-        if (depth > 2) {
+        if (depth > 3) {
             return this.getScore(state)
         }
         
@@ -181,7 +181,7 @@ class BotMinimaxLocalSearch extends Player {
         
         if (isMaximizing) {
             let bestScore = -Infinity
-            let bestMoves = null
+            let bestMove = null
             let moveOptions = Infinity
             
             for (const pawn of game.currentPlayer.listOfPawns) {
@@ -200,14 +200,14 @@ class BotMinimaxLocalSearch extends Player {
                                     bestScore = score
                                     bestMove = {pawn: pawn, move: move}
                                 } else if (score === bestScore) {
-                                    if (moves.length > moveOptions) {
+                                    if (Math.random() > 0.5) {
                                         bestMove = {pawn: pawn, move: move}
                                     }
                                 }
                             } else {
                                 bestScore = Math.max(bestScore, score)
                             }
-                            
+
                             alpha = Math.max(alpha, bestScore)
                             
                             if (beta <= alpha) 

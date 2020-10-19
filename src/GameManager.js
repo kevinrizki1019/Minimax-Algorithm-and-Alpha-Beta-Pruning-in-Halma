@@ -53,26 +53,23 @@ class GameManager {
         this.redScoreMatrix = []
 
         let a = 100
-        let b = 1
+        let b = 5
         for (let j = 0; j < game.boardSize; j++) {
             const row = []
             const tmpA = a
-            const tmpB = b
             for (let i = 0; i < game.boardSize; i++) {
                 row.push(a)
                 a -= (b)
-                b += 1
             }
             this.greenScoreMatrix.push(row)
             this.redScoreMatrix.push(JSON.parse(JSON.stringify(row)))
-            a = tmpA-tmpB
-            b = tmpB+1
+            a = tmpA-b
         }
         for (let row of this.redScoreMatrix) {
             row.reverse()
         }
         this.redScoreMatrix.reverse()
-        console.log("scoreMatrix", this.greenScoreMatrix, this.redScoreMatrix)
+        console.log(this.redScoreMatrix, this.greenScoreMatrix)
 
         // setup interaction for human player
         window.addEventListener('click', (e) => {   
@@ -113,7 +110,13 @@ class GameManager {
         const temp = this.currentPlayer
         this.currentPlayer = this.nextPlayer
         this.nextPlayer = temp
-        this.currentPlayer.move()
+
+        if (!this.players[0] instanceof Human && !this.players[1] instanceof Human) {
+            setTimeout(300, this.currentPlayer)
+        } else {
+            this.currentPlayer.move()
+        }
+
     }
 
     getPawnAt(post) {
