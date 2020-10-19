@@ -80,7 +80,7 @@ class Board {
     stepNeeded(fromX,fromY,toX,toY){
         let disX = toX-fromX;
         let disY = toY-fromY;
-        return Math.abs((disX+disY)-Math.max(disX,disY));
+        return Math.abs(disX+disY)-Math.max(Math.abs(disX),Math.abs(disY));
     }
     
     boardStateValue(){
@@ -228,8 +228,13 @@ board.printBoard();
 // board.validateMove(new Position("d", 1), new Position("e", 2));
 
 // Jumping case
-let objPaths = {paths: [], visited: []};
-board.jumpMoveValidation(board.matrix, objPaths, [], 3, 0);
-console.log(objPaths.paths);
-board.printBoard();
+// let objPaths = {paths: [], visited: []};
+// board.jumpMoveValidation(board.matrix, objPaths, [], 3, 0);
+// console.log(objPaths.paths);
+
+// board.printBoard();
+// console.log(board.stepNeeded(0,0,4,5));
+console.log(board.boardStateValue());
+console.log(board.stepNeeded(0,0,9,9));
+console.log(board.stepNeeded(9,9,0,0));
 module.exports = { Board }
