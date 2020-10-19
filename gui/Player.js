@@ -61,9 +61,9 @@ class BotMinimax extends Player {
         game.changePlayer()
     }
 
-    stepNeeded(fromX,fromY,toX,toY){
-        let disX = toX-fromX
-        let disY = toY-fromY
+    stepNeeded(from, to){
+        let disX = to.x-from.x
+        let disY = to.y-from.y
         // return Math.abs((disX+disY)-Math.max(disX,disY))
         let dist = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2))
         return dist
@@ -71,33 +71,30 @@ class BotMinimax extends Player {
     
     getScore(state){
         const game = this.game
-        let poin = 0;
+        let poin = 0
 
-        if (game.currentPlayer.color === game.players[0].color) {
-            for (const pawn of game.players[0].listOfPawns) {
-                poin -= this.stepNeeded(i, j, state.length-1, state.length-1)
+        if (this.color === game.players[0].color) {
+            for (const pawn of this.listOfPawns) {
+                poin -= this.stepNeeded(pawn.post, new Position(state.length-1, state.length-1))
             }
             for (const pawn of game.players[1].listOfPawns) {
-                poin += this.stepNeeded(i, j, 0, 0)
+                poin += this.stepNeeded(pawn.post, new Position(0, 0))
             }
             return poin
         } else {
-            for (const pawn of game.players[1].listOfPawns) {
-                poin -= this.stepNeeded(i, j, 0, 0)
+            for (const pawn of this.listOfPawns) {
+                poin -= this.stepNeeded(pawn.post, new Position(0, 0))
             }
             for (const pawn of game.players[0].listOfPawns) {
-                poin += this.stepNeeded(i, j, state.length-1, state.length-1)
+                poin += this.stepNeeded(pawn.post, new Position(state.length-1, state.length-1))
             }
             return poin
         }
     }
 
-    getScore(state) {
-        return Math.floor(Math.random() * 132)
-    }
-
     minimax(state, depth, game, isMaximizing, alpha, beta) {
         if (depth > 3) {
+            // console.log(this.getScore(state))
             return this.getScore(state)
         }
         
@@ -128,8 +125,11 @@ class BotMinimax extends Player {
                 }
             }
 
-            if (depth === 0) 
+            if (depth === 0) {
+                console.log(bestScore)
                 return bestMove
+            } 
+                
             return bestScore
         } else {
             let bestScore = Infinity
@@ -159,6 +159,7 @@ class BotMinimax extends Player {
     move() {
         const game = this.game
         const optimalMove = this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity)
+        console.log(optimalMove)
         game.movePawnTo(optimalMove.pawn, optimalMove.move)
         game.changePlayer()
     }
