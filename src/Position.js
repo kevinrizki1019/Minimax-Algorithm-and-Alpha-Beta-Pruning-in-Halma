@@ -19,4 +19,4 @@ class Position {
     isSame(otherPoint) { return ((this.x == otherPoint.x) && (this.y == otherPoint.y)); }
 }
 
-module.exports = { Position };
+// module.exports = { Position };

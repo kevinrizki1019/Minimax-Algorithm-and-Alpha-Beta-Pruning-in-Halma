@@ -1,5 +1,3 @@
-const { Position } = require('./Position.js');
-
 /**
  * Class Board for save game board condition
  * Element content convention for Board matrix:
@@ -219,22 +217,22 @@ class Board {
     }
 }
 
-// Testing
-board = new Board(10);
-board.printBoard();
-// board.moveAPawnFromBoard(new Position("e", 1), new Position("f", 1));
-// board.setCellContent(new Position("f",1), 2);
-// board.printBoard();
-// board.validateMove(new Position("d", 1), new Position("e", 2));
-
-// Jumping case
-// let objPaths = {paths: [], visited: []};
-// board.jumpMoveValidation(board.matrix, objPaths, [], 3, 0);
-// console.log(objPaths.paths);
-
-// board.printBoard();
-// console.log(board.stepNeeded(0,0,4,5));
-console.log(board.boardStateValue());
-console.log(board.stepNeeded(0,0,9,9));
-console.log(board.stepNeeded(9,9,0,0));
 module.exports = { Board }
+// Testing
+// board = new Board(10);
+// board.printBoard();
+// // board.moveAPawnFromBoard(new Position("e", 1), new Position("f", 1));
+// // board.setCellContent(new Position("f",1), 2);
+// // board.printBoard();
+// // board.validateMove(new Position("d", 1), new Position("e", 2));
+
+// // Jumping case
+// // let objPaths = {paths: [], visited: []};
+// // board.jumpMoveValidation(board.matrix, objPaths, [], 3, 0);
+// // console.log(objPaths.paths);
+
+// // board.printBoard();
+// // console.log(board.stepNeeded(0,0,4,5));
+// console.log(board.boardStateValue());
+// console.log(board.stepNeeded(0,0,9,9));
+// console.log(board.stepNeeded(9,9,0,0));
