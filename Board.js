@@ -77,6 +77,26 @@ class Board {
         this.matrix[y][x] = content;
     }
 
+    stepNeeded(fromX,fromY,toX,toY){
+        let disX = toX-fromX;
+        let disY = toY-fromY;
+        return Math.abs((disX+disY)-Math.max(disX,disY));
+    }
+    
+    boardStateValue(){
+        let dist=0;
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.matrix[i][j] == 1){
+                    dist += this.stepNeeded(i,j,this.size-1,this.size-1);
+                }
+                else if (this.matrix[i][j] == 2){
+                    dist -= this.stepNeeded(i,j,0,0);
+                }
+            }
+        }
+        return dist;
+    }
     /**
      * moveAPawnFromBoard(currentPosition, finalPosition)
      * If valid, set the cell's content at finalPosition with cell's content at
@@ -211,7 +231,5 @@ board.printBoard();
 let objPaths = {paths: [], visited: []};
 board.jumpMoveValidation(board.matrix, objPaths, [], 3, 0);
 console.log(objPaths.paths);
-
 board.printBoard();
-
 module.exports = { Board }
