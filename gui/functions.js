@@ -22,6 +22,10 @@ function copyState(state) {
     return copiedState
 }
 
+function copyPawn(pawn) {
+    return new Pawn(new Position(pawn.x, pawn.y), pawn.color)
+}
+
 function explorePath(state, objPaths, visited, post) {
     let end_path = true
     moves = [[0, -2], [0, 2], [-2, 0], [2, 0], [-2, -2], [2, -2], [2, 2], [-2, 2]]
@@ -55,4 +59,79 @@ function explorePath(state, objPaths, visited, post) {
             explorePath(copiedState, objPaths, [...visited, post], new Position(move.x, move.y))
         }
     }
+}
+
+function getValidMovesPawnAt(state, x, y) {
+    let validMoves = []
+    const moves = [
+        new Position(x-1, y),
+        new Position(x, y-1),
+        new Position(x+1, y),
+        new Position(x, y+1),
+        new Position(x-1, y-1),
+        new Position(x+1, y-1),
+        new Position(x+1, y+1),
+        new Position(x-1, y+1),
+    ]
+    for (const move of moves) {
+        if (isValidPosition(state, move)) {
+            if (isEmptyCell(state, move)) {
+                validMoves.push(move)
+            }
+        }
+    }
+
+    let obj = {paths: validMoves}
+    explorePath(state, obj, [], new Position(x, y))
+
+    return obj.paths
+}
+
+function checkWinner(state, players) {
+    const Bsize = state.length
+
+    // Check if player 2 win 
+    let game_end = true
+    for (let i = 0; i < Bsize/2; i++) {
+        for (let j = 0; j < Bsize/2-i; j++) {
+            const pawn = state[j][i] 
+            if (pawn) {
+                if (pawn.color !== players[1].color) {
+                    game_end = false
+                    break
+                }
+            } else {
+                game_end = false
+                break
+            }
+        }
+        if (!game_end) break
+    }
+    if (game_end) return players[1].color
+
+    // Check if player 1 win
+    game_end = true
+    const copyBoard = copyState(state)
+    for (const row of copyBoard) {
+        row.reverse() 
+    }
+    copyBoard.reverse()
+    for (let i = 0; i < Bsize/2; i++) {
+        for (let j = 0; j < Bsize/2-i; j++) {
+            const pawn = copyBoard[j][i]
+            if (pawn) {
+                if (pawn.color !== players[0].color) {
+                    game_end = false
+                    break
+                }
+            } else {
+                game_end = false
+                break
+            }
+        }
+        if (!game_end) break
+    }
+    if (game_end) return players[0].color
+
+    return null
 }

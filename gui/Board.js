@@ -35,12 +35,9 @@ class Board {
         game.canvas.clear()
         this.draw()
 
-        for (let i = 0; i < game.boardSize; i++) {
-            for (let j = 0; j < game.boardSize; j++) {
-                let selectedPawn = game.getPawnAt(new Position(j, i))
-                if (selectedPawn) {
-                    selectedPawn.draw()
-                }
+        for (let i = 0; i < 2; i++) {
+            for (const pawn of game.players[i].listOfPawns) {
+                pawn.draw()
             }
         }
     }

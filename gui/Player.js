@@ -2,6 +2,7 @@ class Player {
     constructor(game, color) {
         this.game = game
         this.color = color
+        this.listOfPawns = []
     }
 }
 
@@ -19,7 +20,6 @@ class Human extends Player {
     }
 
     move() {
-        console.log("Human move")
         // do nothing
     }
 }
@@ -31,6 +31,7 @@ class BotMinimax extends Player {
     
     move() {
         const game = this.game
+        console.log("minimax", this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity))
         let validMoves = []
         let pawns = []
         let currentPawn = 0
@@ -56,106 +57,100 @@ class BotMinimax extends Player {
         const randomMoveNum = Math.floor(Math.random() * validMoves.length)
         const selectedPawn = pawns[randomPawnNum]
         const selectedMove = validMoves[randomMoveNum]
-        console.log(pawns)
-        console.log(validMoves)
         game.movePawnTo(selectedPawn, new Position(selectedMove[0], selectedMove[1]))
         game.changePlayer()
+    }
+
+    stepNeeded(fromX,fromY,toX,toY){
+        let disX = toX-fromX
+        let disY = toY-fromY
+        // return Math.abs((disX+disY)-Math.max(disX,disY))
+        let dist = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2))
+        return dist
+    }
+    
+    getScore(state){
+        const game = this.game
+        let poin = 0;
+
+        if (game.currentPlayer.color === game.players[0].color) {
+            for (const pawn of game.players[0].listOfPawns) {
+                poin -= this.stepNeeded(i, j, state.length-1, state.length-1)
+            }
+            for (const pawn of game.players[1].listOfPawns) {
+                poin += this.stepNeeded(i, j, 0, 0)
+            }
+            return poin
+        } else {
+            for (const pawn of game.players[1].listOfPawns) {
+                poin -= this.stepNeeded(i, j, 0, 0)
+            }
+            for (const pawn of game.players[0].listOfPawns) {
+                poin += this.stepNeeded(i, j, state.length-1, state.length-1)
+            }
+            return poin
+        }
     }
 
     getScore(state) {
         return Math.floor(Math.random() * 132)
     }
 
-    isGameFinished(state) {
-
-    }
-
     minimax(state, depth, game, isMaximizing, alpha, beta) {
-        if (game.checkWinner(state) || depth > 200) {
+        if (depth > 3) {
             return this.getScore(state)
         }
-    
+        
         if (isMaximizing) {
             let bestScore = -Infinity
             let bestMove = null
-    
-            // For every pawn of player
-            let is_break = false
-            for (let y = 0; y < state.length; y++) {
-                for (let x = 0; x < state.length; x++) {
-                    const pawn = game.getPawnAt(new Position(x, y))
-                    if (pawn) {
-                        if (pawn.color === game.currentPlayer.color) {
-                            // check for one step to any direction
-                            const moves = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]
-                            for (const move of moves) {
-                                const movePost = new Position(x + move[0], y + move[1])
-                                if (isValidPosition(state, movePost) && isEmptyCell(state, movePost)) {
-                                    const copiedState = copyState(state)
-                                    copiedState[movePost.y][movePost.x] = pawn
-                                    copiedState[y][x] = null
-                                    const score = this.minimax(copiedState, depth+1, game, false, alpha, beta)
-                                    if (score > bestScore) {
-                                        bestScore = score
-                                        bestMove = {pawn: pawn, move: movePost}
-                                    }
-                                    alpha = Math.max(alpha, bestScore)
-                                    if (beta <= alpha) {
-                                        is_break = true
-                                        break
-                                    }
-                                }
-                            }
-                    } 
-                        // check for rule 2
-    
-                }
-    
-                if (is_break) break
-            }
-    
-                if (is_break) break
-            }
-
-            if (depth === 0) {
-                return bestMove
-            } else {
-                return bestScore
-            }
             
-        } else {
-            let bestScore = Infinity
-    
-            // For every pawn of player
-            let is_break = false
-            for (let y = 0; y < state.length; y++) {
-                for (let x = 0; x < state.length; x++) {
-                    const pawn = game.getPawnAt(new Position(x, y))
-                    if (pawn) {
-                        if (pawn.color === game.nextPlayer.color) {
-                            // check one step to any direction
-                            const moves = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]
-                            for (const move of moves) {
-                                const movePost = new Position(x + move[0], y + move[1])
-                                if (isValidPosition(state, movePost) && isEmptyCell(state, movePost)) {
-                                    const copiedState = copyState(state)
-                                    copiedState[movePost.y][movePost.x] = pawn
-                                    copiedState[y][x] = null
-                                    const score = this.minimax(copiedState, depth+1, game, true, alpha, beta)
-                                    bestScore = Math.min(bestScore, score)
-                                    alpha = Math.min(beta, bestScore)
-                                    if (beta <= alpha) {
-                                        is_break = true
-                                        break
-                                    }
-                                }
+            for (const pawn of game.currentPlayer.listOfPawns) {
+                const [x, y] = [pawn.post.x, pawn.post.y]
+                const moves = getValidMovesPawnAt(state, x, y)
+                for (const move of moves) {
+                    if (isValidPosition(state, move)) {
+                        if (isEmptyCell(state, move)) {
+                            const copiedState = copyState(state)
+                            copiedState[move.y][move.x] = new Pawn(new Position(move.x, move.y), pawn.color)
+                            copiedState[y][x] = null
+                            const score = this.minimax(copiedState, depth+1, game, false, alpha, beta)
+                            if (score > bestScore) {
+                                bestScore = score
+                                bestMove = {pawn: pawn, move: move}
                             }
+                            alpha = Math.max(alpha, bestScore)
+                            
+                            if (beta <= alpha) 
+                                break
                         }
                     }
-                    if (is_break) break
                 }
-    
-                if (is_break) break
+            }
+
+            if (depth === 0) 
+                return bestMove
+            return bestScore
+        } else {
+            let bestScore = Infinity
+            for (const pawn of game.currentPlayer.listOfPawns) {
+                const [x, y] = [pawn.post.x, pawn.post.y]
+                const moves = getValidMovesPawnAt(state, x, y)
+                for (const move of moves) {
+                    if (isValidPosition(state, move)) {
+                        if (isEmptyCell(state, move)) {
+                            const copiedState = copyState(state)
+                            copiedState[move.y][move.x] = new Pawn(new Position(move.x, move.y), pawn.color)
+                            copiedState[y][x] = null
+                            const score = this.minimax(copiedState, depth+1, game, true, alpha, beta)
+                            bestScore = Math.min(bestScore, score)
+                            beta = Math.min(beta, bestScore)
+                            
+                            if (beta <= alpha) 
+                                break
+                        }
+                    }
+                }
             }
             return bestScore
         }
@@ -163,7 +158,7 @@ class BotMinimax extends Player {
 
     move() {
         const game = this.game
-        const optimalMove = this.minimax(game.boardMatrix, 0, game, true, 0, 0)
+        const optimalMove = this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity)
         game.movePawnTo(optimalMove.pawn, optimalMove.move)
         game.changePlayer()
     }

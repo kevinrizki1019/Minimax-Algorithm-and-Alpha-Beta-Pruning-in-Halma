@@ -67,7 +67,7 @@ function isGameFinished(Board) {
     // Check if player 1 win
     if (!game_end) {
         game_end = true
-        const copyBoard = JSON.parse(JSON.stringify(state))
+        const copyBoard = JSON.parse(JSON.stringify(Board))
         for (const row of copyBoard) {
             row.reverse() 
         }
@@ -167,92 +167,171 @@ function getScore(state, player) {
     return Math.floor(Math.random() * Math.floor(10)) // generate nilai random 1-10
 }
 
-function isValidMove(Board, x, y, moveX, moveY) {
-    return (moveX >= 0 && moveX < 8) && (moveY >= 0 && moveY < 8) && (Board[moveY][moveX] == 0)
+function isValidMove(Board, moveX, moveY) {
+    try {
+        
+        if ((moveX >= 0 && moveX < 8) && (moveY >= 0 && moveY < 8)) {
+            if (Board[moveY][moveX] == 0) {
+                return true
+            }
+        }
+        return false
+    } catch {
+        console.log("2ooooooooooooooooooooooooooooooooooooooooooooooooooooy")
+        console.log(Board, moveX, moveY)
+    }
+}
+
+function test_recursive(i) {
+    if (i > 10) {
+        return i + 7
+    }
+    return test_recursive(i+1)
 }
 
 function minimax(state, depth, player, isMaximizing, alpha, beta) {
-    if (isGameFinished(state) || depth > 100) {
+    if (isGameFinished(state) || depth > 5) {
         return getScore(state)
     }
 
-    opponent = (player % 2) + 1
+    opponent = (player + 1) % 2
     if (isMaximizing) {
+        
         let bestScore = -Infinity
-
-        // For every pawn of player
-        let is_break = false
         for (let y = 0; y < state.length; y++) {
             for (let x = 0; x < state.length; x++) {
                 if (state[y][x] === player) {
-                    // check for one step to any direction
                     moves = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]
                     for (const move of moves) {
                         const moveX = x + move[0]
                         const moveY = y + move[1]
-                        if (isValidMove(state, x, y, moveX, moveY)) {
+                        if (isValidMove(state, moveX, moveY)) {
                             const copyState = JSON.parse(JSON.stringify(state))
                             copyState[moveY][moveX] = player
                             copyState[y][x] = 0
-                            score = minimax(copyState, depth+1, opponent, [x, y], false, alpha, beta)
+                            console.log("loh ?")
+                            const score = minimax(copyState, depth+1, player, false, alpha, beta)
                             bestScore = Math.max(bestScore, score)
                             alpha = Math.max(alpha, bestScore)
                             if (beta <= alpha) {
-                                is_break = true
                                 break
                             }
                         }
                     }
-
-                    // check for rule 2
-
                 }
-
-                if (is_break) break
             }
-
-            if (is_break) break
         }
         return bestScore
     } else {
         let bestScore = Infinity
-
-        // For every pawn of player
-        let is_break = false
         for (let y = 0; y < state.length; y++) {
             for (let x = 0; x < state.length; x++) {
                 if (state[y][x] === opponent) {
-                    // check one step to any direction
-                    console.log(state)
                     moves = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]
                     for (const move of moves) {
                         const moveX = x + move[0]
                         const moveY = y + move[1]
-                        if (isValidMove(state, x, y, moveX, moveY)) {
+                        if (isValidMove(state, moveX, moveY)) {
                             const copyState = JSON.parse(JSON.stringify(state))
                             copyState[moveY][moveX] = opponent
                             copyState[y][x] = 0
-                            score = minimax(copyState, depth+1, player, [x, y], true, alpha, beta)
+                            score = minimax(copyState, depth+1, player, true, alpha, beta)
                             bestScore = Math.min(bestScore, score)
-                            alpha = Math.min(beta, bestScore)
+                            beta = Math.min(beta, bestScore)
                             if (beta <= alpha) {
-                                is_break = true
                                 break
                             }
                         }
                     }
                 }
-
-                if (is_break) break
             }
-
-            if (is_break) break
         }
         return bestScore
     }
 }
 
+// function minimax(state, depth, player, isMaximizing, alpha, beta) {
+//     if (isGameFinished(state) || depth > 100) {
+//         return getScore(state)
+//     }
+
+//     opponent = (player % 2) + 1
+//     if (isMaximizing) {
+//         let bestScore = -Infinity
+
+//         // For every pawn of player
+//         let is_break = false
+//         for (let y = 0; y < state.length; y++) {
+//             for (let x = 0; x < state.length; x++) {
+//                 if (state[y][x] === player) {
+//                     // check for one step to any direction
+                    // moves = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]
+                    // for (const move of moves) {
+                    //     const moveX = x + move[0]
+                    //     const moveY = y + move[1]
+                    //     if (isValidMove(state, x, y, moveX, moveY)) {
+                    //         const copyState = JSON.parse(JSON.stringify(state))
+                    //         copyState[moveY][moveX] = player
+                    //         copyState[y][x] = 0
+                    //         score = minimax(copyState, depth+1, opponent, [x, y], false, alpha, beta)
+                    //         bestScore = Math.max(bestScore, score)
+                    //         alpha = Math.max(alpha, bestScore)
+                    //         if (beta <= alpha) {
+                    //             is_break = true
+                    //             break
+                    //         }
+                    //     }
+//                     }
+
+//                     // check for rule 2
+
+//                 }
+
+//                 if (is_break) break
+//             }
+
+//             if (is_break) break
+//         }
+//         return bestScore
+//     } else {
+//         let bestScore = Infinity
+
+//         // For every pawn of player
+//         let is_break = false
+//         for (let y = 0; y < state.length; y++) {
+//             for (let x = 0; x < state.length; x++) {
+//                 if (state[y][x] === opponent) {
+//                     // check one step to any direction
+//                     console.log(state)
+//                     moves = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]
+//                     for (const move of moves) {
+//                         const moveX = x + move[0]
+//                         const moveY = y + move[1]
+//                         if (isValidMove(state, x, y, moveX, moveY)) {
+//                             const copyState = JSON.parse(JSON.stringify(state))
+//                             copyState[moveY][moveX] = opponent
+//                             copyState[y][x] = 0
+//                             score = minimax(copyState, depth+1, player, [x, y], true, alpha, beta)
+//                             bestScore = Math.min(bestScore, score)
+//                             alpha = Math.min(beta, bestScore)
+//                             if (beta <= alpha) {
+//                                 is_break = true
+//                                 break
+//                             }
+//                         }
+//                     }
+//                 }
+
+//                 if (is_break) break
+//             }
+
+//             if (is_break) break
+//         }
+//         return bestScore
+//     }
+// }
+
 function test_minimax() {
-    const test = minimax(Board_test_minimax, 0, 2, true, 0, 0)
+    const test = minimax(Board_test_minimax, 0, 2, true, -Infinity, Infinity)
     console.log(test)
 }
