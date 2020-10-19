@@ -53,15 +53,20 @@ class GameManager {
         this.redScoreMatrix = []
 
         let a = 100
+        let b = 1
         for (let j = 0; j < game.boardSize; j++) {
             const row = []
+            const tmpA = a
+            const tmpB = b
             for (let i = 0; i < game.boardSize; i++) {
                 row.push(a)
-                a -= 5
+                a -= (b)
+                b += 1
             }
             this.greenScoreMatrix.push(row)
             this.redScoreMatrix.push(JSON.parse(JSON.stringify(row)))
-            a += (game.boardSize-1)*5
+            a = tmpA-tmpB
+            b = tmpB+1
         }
         for (let row of this.redScoreMatrix) {
             row.reverse()
