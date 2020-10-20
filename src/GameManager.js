@@ -111,11 +111,17 @@ class GameManager {
         this.currentPlayer = this.nextPlayer
         this.nextPlayer = temp
 
-        if (!this.players[0] instanceof Human && !this.players[1] instanceof Human) {
-            setTimeout(300, this.currentPlayer)
-        } else {
-            this.currentPlayer.move()
-        }
+        // if (!(this.currentPlayer instanceof Human)) {
+        //     console.log("set timeout")
+        //     setTimeout(this.currentPlayer.move, 100)
+        // } else {
+        //     console.log("its a human")
+        //     this.currentPlayer.move()
+        // }
+
+        // this.board.update()
+        this.currentPlayer.move()
+        
 
     }
 
@@ -133,8 +139,6 @@ class GameManager {
         this.boardMatrix[post.y][post.x] = pawn
         this.boardMatrix[pawn.post.y][pawn.post.x] = null
         pawn.post = post
-
-        this.board.update()
     }
 
     start() {

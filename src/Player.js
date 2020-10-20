@@ -64,7 +64,7 @@ class BotMinimax extends Player {
     }
 
     minimax(state, depth, game, isMaximizing, alpha, beta) {
-        if (depth > 2) {
+        if (depth > 3) {
             return this.getScore(state)
         }
         
@@ -187,6 +187,7 @@ class BotMinimaxLocalSearch extends Player {
             for (const pawn of game.currentPlayer.listOfPawns) {
                 const [x, y] = [pawn.post.x, pawn.post.y]
                 const moves = getValidMovesPawnAt(state, x, y)
+                let T = 10
                 for (const move of moves) {
                     if (isValidPosition(state, move)) {
                         if (isEmptyCell(state, move)) {
@@ -195,12 +196,20 @@ class BotMinimaxLocalSearch extends Player {
                             copiedState[y][x] = null
                             const score = this.minimax(copiedState, depth+1, game, false, alpha, beta)
 
+                            if (T === 0) {
+                                break
+                            }
+
                             if (depth === 0) {
                                 if (score > bestScore) {
                                     bestScore = score
                                     bestMove = {pawn: pawn, move: move}
-                                } else if (score === bestScore) {
-                                    if (Math.random() > 0.5) {
+                                } else {
+                                    const p = Math.exp((score-bestScore)/T)
+                                    // const randNum = Math.random()
+                                    console.log("prob", p)
+                                    if (p > 0.5) {
+                                        bestScore = score
                                         bestMove = {pawn: pawn, move: move}
                                     }
                                 }
@@ -212,6 +221,8 @@ class BotMinimaxLocalSearch extends Player {
                             
                             if (beta <= alpha) 
                                 break
+
+                            T -= 1
                         }
                     }
                 }
