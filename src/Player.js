@@ -96,7 +96,6 @@ class BotMinimax extends Player {
             }
 
             if (depth === 0) {
-                console.log(bestScore)
                 return bestMove
             } 
                 
@@ -129,9 +128,9 @@ class BotMinimax extends Player {
     move() {
         const game = this.game
         const optimalMove = this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity)
-        console.log(optimalMove)
         game.movePawnTo(optimalMove.pawn, optimalMove.move)
         game.changePlayer()
+
     }
 }
 
@@ -185,6 +184,7 @@ class BotMinimaxLocalSearch extends Player {
             let moveOptions = Infinity
             
             for (const pawn of game.currentPlayer.listOfPawns) {
+                
                 const [x, y] = [pawn.post.x, pawn.post.y]
                 const moves = getValidMovesPawnAt(state, x, y)
                 let T = 10
@@ -206,8 +206,6 @@ class BotMinimaxLocalSearch extends Player {
                                     bestMove = {pawn: pawn, move: move}
                                 } else {
                                     const p = Math.exp((score-bestScore)/T)
-                                    // const randNum = Math.random()
-                                    console.log("prob", p)
                                     if (p > 0.5) {
                                         bestScore = score
                                         bestMove = {pawn: pawn, move: move}
@@ -229,11 +227,11 @@ class BotMinimaxLocalSearch extends Player {
             }
 
             if (depth === 0) {
-                console.log(bestScore)
                 return bestMove
-            } 
-                
-            return bestScore
+            } else {
+                return bestScore
+            }
+
         } else {
             let bestScore = Infinity
             for (const pawn of game.currentPlayer.listOfPawns) {
@@ -262,7 +260,6 @@ class BotMinimaxLocalSearch extends Player {
     move() {
         const game = this.game
         const optimalMove = this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity)
-        console.log(optimalMove)
         game.movePawnTo(optimalMove.pawn, optimalMove.move)
         game.changePlayer()
     }

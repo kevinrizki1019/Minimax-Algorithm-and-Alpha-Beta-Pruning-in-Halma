@@ -69,7 +69,6 @@ class GameManager {
             row.reverse()
         }
         this.redScoreMatrix.reverse()
-        console.log(this.redScoreMatrix, this.greenScoreMatrix)
 
         // setup interaction for human player
         window.addEventListener('click', (e) => {   
@@ -106,22 +105,39 @@ class GameManager {
         })
     }
 
+    printBoard() {
+        const board = []
+        for (let j = 0 ; j < this.boardSize; j++) {
+            const row = []
+            for (let i = 0 ; i < this.boardSize; i++) {
+                const pawn = this.getPawnAt(new Position(i, j))
+                if (pawn) {
+                    if (pawn.color === this.players[0].color) {
+                        row.push(1)
+                    } else {
+                        row.push(2)
+                    }
+                } else {
+                    row.push(0)
+                }
+            }
+            board.push(row)
+        }
+    }
+
     changePlayer() {
-        const temp = this.currentPlayer
-        this.currentPlayer = this.nextPlayer
-        this.nextPlayer = temp
 
-        // if (!(this.currentPlayer instanceof Human)) {
-        //     console.log("set timeout")
-        //     setTimeout(this.currentPlayer.move, 100)
-        // } else {
-        //     console.log("its a human")
-        //     this.currentPlayer.move()
-        // }
+        this.printBoard()
 
-        // this.board.update()
-        this.currentPlayer.move()
-        
+        const winner = checkWinner(this.boardMatrix, this.players)
+        if (winner) {
+            alert(`${winner} win !`)
+        } else {
+            const temp = this.currentPlayer
+            this.currentPlayer = this.nextPlayer
+            this.nextPlayer = temp
+            const timeOut = setTimeout(this.currentPlayer.move.bind(this.currentPlayer), 1)
+        }
 
     }
 
