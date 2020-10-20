@@ -6,7 +6,109 @@
     <title>Document</title>
 </head>
 <body>
-    <h1> Test </h1>
+    <div class="container">
+        <canvas></canvas>
+        <div class=menu>
+            <h1> HALMA GAME </h1>
+            <br><br>
+            <h2> Select player </h2>
+            <select id="selectP1">
+                <option> Red player </option>
+                <option> Human </option>
+                <option> Bot minimax </option>
+                <option> Bot minimax + local search </option>
+            </select>
+            <select id="selectP2">
+                <option> Green player </option>
+                <option> Human </option>
+                <option> Bot minimax </option>
+                <option> Bot minimax + local search </option>
+            </select>
+            <br>
+            <h2> Input parameter </h2>
+            <select id="Bsize">
+                <option>Board size</option>
+                <option>8</option>
+                <option>10</option>
+                <option>16</option>
+            </select>
+            <input type="text" id="Tlimit" placeholder="Time limit">
+            <br>
+            <button id="play"> PLAY </button>
+        </div>
+        <div class="playing">
+            <h1>Currently playing ...</h1>
+        </div>
+        <div class="winner">
+            <h1></h1>
+            <h3></h3>
+            <button id="play-again">Play again</button>
+        </div>
+    </div>
 </body>
-<script src="test.js"></script>
+<script src="./gui/Canvas.js"></script>
+<script src="./src/functions.js"></script>
+<script src="./src/Position.js"></script>
+<script src="./src/Board.js"></script>
+<script src="./src/Pawn.js"></script>
+<script src="./src/Player.js"></script>
+<script src="./src/GameManager.js"></script>
+<script src="index.js"></script>
+
 </html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .container {
+        display: flex;
+    }
+
+    .menu, .playing, .winner {
+        margin-left: 30px;
+        margin-top: 30px;
+    }
+
+    .playing, .winner, #play-again {
+        display: none;
+    }
+
+    .winner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .winner h1 {
+        font-size: 80px;
+    }
+
+    .winner button {
+        margin-top: 20px;
+        text-align: center;
+        justify-content: center;
+    }
+
+    select, input, button  {
+        display: block;
+        margin-top: 10px;
+        padding: 5px 2px;
+        width: 100%;
+    }
+
+    input {
+        padding: 8px;
+    }
+
+    .container .menu select:hover {
+        cursor: pointer;
+    }
+
+    .container .menu button:hover {
+        cursor: pointer;
+    }
+
+</style>
