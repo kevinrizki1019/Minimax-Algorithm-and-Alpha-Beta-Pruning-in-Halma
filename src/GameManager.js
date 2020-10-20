@@ -112,7 +112,7 @@ class GameManager {
             document.querySelector('.playing').style.display = 'none'
             document.querySelector('#play-again').style.display = 'flex'
             winnerEl.querySelector('h1').innerText = `${winner} win !`
-            winnerEl.querySelector('h3').innerText = `playing time: ${playTime}`
+            winnerEl.querySelector('h3').innerText = `playing time: ${playTime} ms`
             winnerEl.style.display = 'flex'
         } else {
             const temp = this.currentPlayer
