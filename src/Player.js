@@ -203,7 +203,7 @@ class BotMinimaxLocalSearch extends Player {
                                 if (score > bestScore) {
                                     bestScore = score
                                     bestMove = {pawn: pawn, move: move}
-                                } else {
+                                } else if (score === bestScore) {
                                     const p = Math.exp((score-bestScore)/T)
                                     if (p > Math.random()) {
                                         bestScore = score
