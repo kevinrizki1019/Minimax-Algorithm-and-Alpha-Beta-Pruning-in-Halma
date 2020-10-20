@@ -64,7 +64,7 @@ class BotMinimax extends Player {
     }
 
     minimax(state, depth, game, isMaximizing, alpha, beta) {
-        if (depth > 3) {
+        if (checkWinner(state, game.players) || depth > 2) {
             return this.getScore(state)
         }
         
@@ -173,7 +173,7 @@ class BotMinimaxLocalSearch extends Player {
     }
 
     minimax(state, depth, game, isMaximizing, alpha, beta) {
-        if (checkWinner(state, game.players) || depth > 4) {
+        if (checkWinner(state, game.players) || depth > 2) {
             return this.getScore(state)
         }
         
