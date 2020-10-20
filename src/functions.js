@@ -61,7 +61,25 @@ function explorePath(state, objPaths, visited, post) {
     }
 }
 
+function sign(p1, p2, p3)
+{
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
+}
+
+function PointInTriangle(pt, v1, v2, v3)
+{
+    const d1 = sign(pt, v1, v2);
+    const d2 = sign(pt, v2, v3);
+    const d3 = sign(pt, v3, v1);
+
+    const has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+    const has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+    return !(has_neg && has_pos);
+}
+
 function getValidMovesPawnAt(state, x, y) {
+    const Bsize = state.length
     let validMoves = []
     const moves = [
         new Position(x-1, y),
@@ -83,8 +101,33 @@ function getValidMovesPawnAt(state, x, y) {
 
     let obj = {paths: validMoves}
     explorePath(state, obj, [], new Position(x, y))
-
+    
+    let filtered = []
+    const inRedArea = (x, y) => {
+        return PointInTriangle(new Position(x, y), new Position(0, 0), new Position(Bsize/2-1, 0), new Position(0, Bsize/2-1))
+    }
+    const inGreenArea = (x, y) => {
+        return PointInTriangle(new Position(x, y), new Position(Bsize-1, Bsize-1), new Position(Bsize-1, Bsize/2), new Position(Bsize/2, Bsize-1))
+    }
+    const pawn = state[y][x]
+    if (pawn) {
+        if (state[y][x].color === 'green') {
+            for (const path of obj.paths) {
+                if (inRedArea(x, y) && !inRedArea(path.x, path.y)) continue
+                if (!inGreenArea(x, y) && inGreenArea(path.x, path.y)) continue
+                filtered.push(path)            
+            }
+        } else {
+            for (const path of obj.paths) {
+                if (inGreenArea(x, y) && !inGreenArea(path.x, path.y)) continue
+                if (!inRedArea(x, y) && inRedArea(path.x, path.y)) continue
+                filtered.push(path)            
+            }
+        }
+    }
+    
     return obj.paths
+    // return filtered
 }
 
 function checkWinner(state, players) {

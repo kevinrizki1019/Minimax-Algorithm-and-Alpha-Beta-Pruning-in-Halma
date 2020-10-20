@@ -106,29 +106,7 @@ class GameManager {
         })
     }
 
-    printBoard() {
-        const board = []
-        for (let j = 0 ; j < this.boardSize; j++) {
-            const row = []
-            for (let i = 0 ; i < this.boardSize; i++) {
-                const pawn = this.getPawnAt(new Position(i, j))
-                if (pawn) {
-                    if (pawn.color === this.players[0].color) {
-                        row.push(1)
-                    } else {
-                        row.push(2)
-                    }
-                } else {
-                    row.push(0)
-                }
-            }
-            board.push(row)
-        }
-    }
-
     changePlayer() {
-
-        this.printBoard()
 
         const winner = checkWinner(this.boardMatrix, this.players)
         if (winner) {
