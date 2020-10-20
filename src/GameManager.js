@@ -1,23 +1,19 @@
 class GameManager {
-    constructor(canvas, boardSize) {
+    constructor(canvas) {
         this.canvas = canvas;
+        this.boardMatrix = []
+    }
+
+    setup(player1, player2, boardSize) {
 
         // Board variables
         this.boardSize = boardSize
         this.blockSize = canvas.element.width/boardSize
-        this.boardMatrix = []
-
-        // Player variables
-        this.players = null
-        this.currentPlayer = null
-        this.nextPlayer = null
-    }
-
-    setup(player1, player2) {
 
         // Create board
         this.board = new Board(this)
         this.board.draw()
+        
 
         for (let i = 0; i < this.boardSize; i++) {
             let row = []
@@ -110,7 +106,14 @@ class GameManager {
 
         const winner = checkWinner(this.boardMatrix, this.players)
         if (winner) {
-            setTimeout(alert, 1, `${winner} win !`)
+            const playTime = new Date().getTime() - this.startTime
+            const winnerEl = document.querySelector('.winner')
+
+            document.querySelector('.playing').style.display = 'none'
+            document.querySelector('#play-again').style.display = 'flex'
+            winnerEl.querySelector('h1').innerText = `${winner} win !`
+            winnerEl.querySelector('h3').innerText = `playing time: ${playTime}`
+            winnerEl.style.display = 'flex'
         } else {
             const temp = this.currentPlayer
             this.currentPlayer = this.nextPlayer
@@ -137,6 +140,7 @@ class GameManager {
     }
 
     start() {
+        this.startTime = new Date().getTime()
         this.currentPlayer.move()
     }
 }

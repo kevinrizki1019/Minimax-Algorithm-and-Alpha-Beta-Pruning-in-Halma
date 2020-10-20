@@ -7,8 +7,6 @@ class Pawn {
 
     draw() {
         let game = this.game
-        let fontSize = 30
-        game.canvas.ctx.font = fontSize + "px Arial"
         let pawnColor = null
         if (this.color === "red") {
             pawnColor = "#822322"
@@ -18,8 +16,9 @@ class Pawn {
         game.canvas.ctx.fillStyle = pawnColor
         game.canvas
             .createCircle(
-                this.post.x * game.blockSize + game.blockSize/2 - fontSize/24, 
-                this.post.y * game.blockSize + game.blockSize/2 + fontSize/24
+                this.post.x * game.blockSize + game.blockSize/2, 
+                this.post.y * game.blockSize + game.blockSize/2,
+                game.blockSize*1.5/4
             )
     }
 }

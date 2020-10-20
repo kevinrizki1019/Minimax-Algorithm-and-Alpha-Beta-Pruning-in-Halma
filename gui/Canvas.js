@@ -22,9 +22,9 @@ class Canvas {
         this.ctx.stroke()
     }
 
-    createCircle(x, y) {
+    createCircle(x, y, radius) {
         this.ctx.beginPath();
-        this.ctx.arc(x, y, 25, 0, 2 * Math.PI);
+        this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
         this.ctx.fill();
         this.strokeStyle = '#000'
         this.ctx.stroke()
