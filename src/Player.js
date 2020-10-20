@@ -129,8 +129,7 @@ class BotMinimax extends Player {
         const game = this.game
         const optimalMove = this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity)
         game.movePawnTo(optimalMove.pawn, optimalMove.move)
-        game.changePlayer()
-
+        setTimeout(game.changePlayer.bind(this.game), 1)
     }
 }
 
@@ -206,7 +205,7 @@ class BotMinimaxLocalSearch extends Player {
                                     bestMove = {pawn: pawn, move: move}
                                 } else {
                                     const p = Math.exp((score-bestScore)/T)
-                                    if (p > 0.5) {
+                                    if (p > Math.random()) {
                                         bestScore = score
                                         bestMove = {pawn: pawn, move: move}
                                     }
@@ -261,6 +260,6 @@ class BotMinimaxLocalSearch extends Player {
         const game = this.game
         const optimalMove = this.minimax(game.boardMatrix, 0, game, true, -Infinity, Infinity)
         game.movePawnTo(optimalMove.pawn, optimalMove.move)
-        game.changePlayer()
+        setTimeout(game.changePlayer.bind(this.game), 1)
     }
 }

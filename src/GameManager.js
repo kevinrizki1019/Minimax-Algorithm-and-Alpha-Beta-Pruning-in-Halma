@@ -91,7 +91,8 @@ class GameManager {
                             if (move.isSame(validMove)) {
                                 this.movePawnTo(this.currentPlayer.selectedPawn, move)
                                 this.currentPlayer.resetAction()
-                                this.changePlayer()
+
+                                setTimeout(this.changePlayer.bind(this), 1)
 
                                 isValidMove = true
                                 break
@@ -131,12 +132,12 @@ class GameManager {
 
         const winner = checkWinner(this.boardMatrix, this.players)
         if (winner) {
-            alert(`${winner} win !`)
+            setTimeout(alert, 1, `${winner} win !`)
         } else {
             const temp = this.currentPlayer
             this.currentPlayer = this.nextPlayer
             this.nextPlayer = temp
-            const timeOut = setTimeout(this.currentPlayer.move.bind(this.currentPlayer), 1)
+            setTimeout(this.currentPlayer.move.bind(this.currentPlayer), 1)
         }
 
     }
