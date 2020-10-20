@@ -64,7 +64,7 @@ class BotMinimax extends Player {
     }
 
     minimax(state, depth, game, isMaximizing, alpha, beta) {
-        if (depth > 3) {
+        if (depth > 2) {
             return this.getScore(state)
         }
         
